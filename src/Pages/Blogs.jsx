@@ -10,12 +10,18 @@ import {
   Paper,
   Rating,
   Divider,
+  useTheme,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 
 const MotionBox = motion(Box);
 
+
+
 const Blogs = () => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState({});
@@ -88,6 +94,8 @@ const Blogs = () => {
     }
   };
 
+  const gold = '#c5a46d';
+
   return (
     <Box
       sx={{
@@ -112,19 +120,25 @@ const Blogs = () => {
         },
       }}
     >
-      {/* Header */}
       <Typography
         variant="h6"
-        sx={{ color: '#c5a46d', letterSpacing: 2, fontWeight: 300 }}
+        sx={{
+          color: gold,
+          letterSpacing: 2,
+          fontWeight: 300,
+          textAlign: 'center',
+        }}
       >
         LUXURY HOTEL AND RESORT
       </Typography>
+
       <Typography
         variant="h3"
         sx={{
           color: '#fff',
           fontWeight: 'bold',
           mb: 4,
+          textAlign: 'center',
           textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
           fontFamily: `'Playfair Display', serif`,
         }}
@@ -132,16 +146,15 @@ const Blogs = () => {
         CLIENT TESTIMONIALS & FEEDBACK
       </Typography>
 
-      {/* Blog Form */}
       {user && (
         <Paper
           elevation={5}
           sx={{
             p: 4,
             mb: 6,
-            backgroundColor: '#1a1a1a',
+            backgroundColor: isDark ? '#121212' : '#f4f4f4',
             borderRadius: 4,
-            color: '#fff',
+            color: isDark ? '#fff' : '#000',
             maxWidth: 800,
             mx: 'auto',
             boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
@@ -151,7 +164,7 @@ const Blogs = () => {
             variant="h5"
             sx={{
               mb: 2,
-              color: '#c5a46d',
+              color: gold,
               fontWeight: 600,
               fontFamily: `'Playfair Display', serif`,
             }}
@@ -159,7 +172,7 @@ const Blogs = () => {
             Share Your Experience
           </Typography>
 
-          <Divider sx={{ borderColor: '#444', mb: 3 }} />
+          <Divider sx={{ borderColor: isDark ? '#444' : '#ccc', mb: 3 }} />
 
           <TextField
             label="Blog Title"
@@ -169,17 +182,17 @@ const Blogs = () => {
             onChange={(e) => setTitle(e.target.value)}
             sx={{
               mb: 3,
-              input: { color: '#fff' },
+              input: { color: isDark ? '#fff' : '#000' },
               '& .MuiInputLabel-root': {
                 color: '#aaa',
                 '&.Mui-focused': {
-                  color: '#1976d2',
+                  color: gold,
                 },
               },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#555' },
-                '&:hover fieldset': { borderColor: '#c5a46d' },
-                '&.Mui-focused fieldset': { borderColor: '#c5a46d' },
+                '&:hover fieldset': { borderColor: gold },
+                '&.Mui-focused fieldset': { borderColor: gold },
               },
             }}
           />
@@ -194,17 +207,17 @@ const Blogs = () => {
             onChange={(e) => setContent(e.target.value)}
             sx={{
               mb: 4,
-              textarea: { color: '#fff' },
+              textarea: { color: isDark ? '#fff' : '#000' },
               '& .MuiInputLabel-root': {
                 color: '#aaa',
                 '&.Mui-focused': {
-                  color: '#1976d2',
+                  color: gold,
                 },
               },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#555' },
-                '&:hover fieldset': { borderColor: '#c5a46d' },
-                '&.Mui-focused fieldset': { borderColor: '#c5a46d' },
+                '&:hover fieldset': { borderColor: gold },
+                '&.Mui-focused fieldset': { borderColor: gold },
               },
             }}
           />
@@ -213,7 +226,7 @@ const Blogs = () => {
             variant="contained"
             onClick={handleSubmit}
             sx={{
-              backgroundColor: '#c5a46d',
+              backgroundColor: gold,
               fontWeight: 'bold',
               fontFamily: `'Playfair Display', serif`,
               '&:hover': { backgroundColor: '#a78958' },
@@ -224,12 +237,10 @@ const Blogs = () => {
         </Paper>
       )}
 
-      {/* Testimonials */}
       <Grid container spacing={4}>
         {blogs.map((blog) => (
           <Grid item xs={12} sm={6} md={4} key={blog.id}>
             <Box sx={{ textAlign: 'center', position: 'relative' }}>
-              {/* Avatar */}
               <Avatar
                 src={blog.avatar_url}
                 alt={blog.author_name}
@@ -244,11 +255,11 @@ const Blogs = () => {
                 }}
               />
 
-              {/* Card */}
               <MotionBox
                 whileHover={{ scale: 1.03 }}
                 sx={{
-                  backgroundColor: '#fff',
+                  backgroundColor: isDark ? '#1e1e1e' : '#fff',
+                  color: isDark ? '#fff' : '#000',
                   borderRadius: 4,
                   px: 3,
                   pt: 5,
@@ -257,11 +268,10 @@ const Blogs = () => {
                   position: 'relative',
                 }}
               >
-                {/* Quote */}
                 <Typography
                   sx={{
                     fontSize: 40,
-                    color: '#c5a46d',
+                    color: gold,
                     position: 'absolute',
                     top: 10,
                     left: 20,
@@ -276,9 +286,8 @@ const Blogs = () => {
                   {blog.content}
                 </Typography>
 
-                <Rating value={5} readOnly size="small" sx={{ color: '#c5a46d' }} />
+                <Rating value={5} readOnly size="small" sx={{ color: gold }} />
 
-                {/* Triangle */}
                 <Box
                   sx={{
                     position: 'absolute',
@@ -289,17 +298,16 @@ const Blogs = () => {
                     height: 0,
                     borderLeft: '15px solid transparent',
                     borderRight: '15px solid transparent',
-                    borderTop: '15px solid #fff',
+                    borderTop: `15px solid ${isDark ? '#1e1e1e' : '#fff'}`,
                   }}
                 />
               </MotionBox>
 
-              {/* Author */}
               <Box sx={{ mt: 5 }}>
                 <Typography variant="subtitle1" sx={{ color: '#fff', fontWeight: 600 }}>
                   {blog.author_name}
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#c5a46d' }}>
+                <Typography variant="body2" sx={{ color: gold }}>
                   Tourist
                 </Typography>
               </Box>

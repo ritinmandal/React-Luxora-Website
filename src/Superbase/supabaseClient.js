@@ -50,12 +50,9 @@ export const getAvatarUrl = async (avatarData) => {
     
     let filePath = avatarData;
     
-    // If it's hex encoded, decode it
     if (typeof avatarData === 'string' && avatarData.startsWith('\\x')) {
       console.log('Decoding hex data...');
-      // Remove the \x prefix and decode hex
       const hexString = avatarData.substring(2);
-      // Convert hex to string using browser-compatible method
       filePath = hexString.match(/.{1,2}/g)?.map(byte => String.fromCharCode(parseInt(byte, 16))).join('') || '';
       console.log('Decoded file path:', filePath);
     }
@@ -86,7 +83,6 @@ export const testAvatarUrl = async (userId) => {
   try {
     console.log('Testing avatar URL for user:', userId);
     
-    // Get user data
     const { data: userData, error: userError } = await getUserProfile(userId);
     if (userError) {
       console.error('Error getting user profile:', userError);
