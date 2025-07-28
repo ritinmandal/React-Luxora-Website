@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from '../Layouts/Header';
 import Footer from '../Layouts/Footer';
 import ProtectedRoute from '../Components/ProtectedRoute';
+import ScrollToTop from '../Components/ScrollToTop';
 
 const Home = lazy(() => import('../Pages/Home'));
 const Rooms = lazy(() => import('../Pages/Rooms'));
@@ -36,6 +37,8 @@ const Routing = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+
+      <ScrollToTop />
 
       <Suspense
         fallback={
