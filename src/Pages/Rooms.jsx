@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -13,8 +13,9 @@ import {
 import StarIcon from '@mui/icons-material/Star';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { motion } from 'framer-motion';
-import { supabase } from '../Superbase/supabaseClient';
-import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../Redux/Slices/Productslice';
+import { addToCart } from '../Redux/Slices/RoomCartslice';
 
 const MotionBox = motion(Box);
 const MotionTypography = motion(Typography);
@@ -36,56 +37,17 @@ const staggerContainer = {
 const gold = '#bfa26c';
 
 export default function RoomGrid() {
-  const [products, setProducts] = useState([]);
-  const [adding, setAdding] = useState({});
+  const dispatch = useDispatch();
+
+  const products = useSelector((state) => state.products.items);
+  const adding = useSelector((state) => state.cart.adding);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-  const fetchProducts = async () => {
-    const { data, error } = await supabase.from('Products').select('*');
-    if (error) {
-      console.error('Error fetching rooms:', error);
-      toast.error('Failed to load rooms');
-    } else {
-      setProducts(data);
-    }
-  };
-
-  const handleAddToCart = async (product) => {
-    try {
-      setAdding((s) => ({ ...s, [product.id]: true }));
-
-      const { data, error: authError } = await supabase.auth.getUser();
-      if (authError || !data?.user) {
-        toast.error('Please log in to add items to your cart.');
-        setAdding((s) => ({ ...s, [product.id]: false }));
-        return;
-      }
-
-      const user = data.user;
-
-      const { error } = await supabase.from('Cart').insert({
-        user_id: user.id,
-        name: product.name,
-        price: product.price,
-        image_url: product.image_url,
-        capacity: product.capacity || 2,
-      });
-
-      if (error) throw error;
-
-      toast.success('Room added to cart!', {
-        style: { border: '1px solid #c2a15f', padding: '16px', color: '#4c4c4c' },
-        iconTheme: { primary: '#c2a15f', secondary: '#ffffff' },
-      });
-    } catch (err) {
-      console.error('Failed to add to cart:', err.message);
-      toast.error('Failed to add to cart.');
-    } finally {
-      setAdding((s) => ({ ...s, [product.id]: false }));
-    }
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
   };
 
   return (
