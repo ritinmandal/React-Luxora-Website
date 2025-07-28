@@ -223,10 +223,8 @@ const AuthForm = () => {
             width: '50%',
             height: '100%',
             backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url('../../public/pexels-shuvalova-natalia-415991090-15211651.jpg')`,
-            
-backgroundSize: 'cover',
-backgroundPosition: 'center',
-
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
             color: '#fff',
             zIndex: 2,
             display: 'flex',
@@ -246,7 +244,11 @@ backgroundPosition: 'center',
               : 'To keep connected with us please login with your personal info'}
           </Typography>
           <Button
-            onClick={() => setIsLogin((prev) => !prev)}
+            onClick={() => {
+              setIsLogin((prev) => !prev);
+              setSignupStep('form');
+              setMessage('');
+            }}
             variant="outlined"
             sx={{ color: '#fff', borderColor: '#fff' }}
           >
@@ -343,7 +345,7 @@ backgroundPosition: 'center',
                 </Button>
 
                 {!isLogin && (
-                  <Button variant="outlined" onClick={handleTestPermissions} sx={{ mt: 1, }} type="button">
+                  <Button variant="outlined" onClick={handleTestPermissions} sx={{ mt: 1 }} type="button">
                     Test Permissions
                   </Button>
                 )}
@@ -375,7 +377,15 @@ backgroundPosition: 'center',
                 <Typography variant="body2" mb={3}>
                   Your account has been created successfully. You can now log in and access your dashboard.
                 </Typography>
-                <Button onClick={() => setIsLogin(true)} variant="contained" sx={{ mr: 2 }}>
+                <Button
+                  onClick={() => {
+                    setIsLogin(true);
+                    setSignupStep('form');
+                    setMessage('');
+                  }}
+                  variant="contained"
+                  sx={{ mr: 2 }}
+                >
                   Sign In
                 </Button>
                 <Button onClick={resetForm} variant="outlined">
