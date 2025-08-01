@@ -59,13 +59,12 @@ const Contact = () => {
       }}
     >
       <Grid container spacing={4} alignItems="stretch">
-        {/* Left Column */}
-        <Grid item xs={12} md={6} sx={{ width: '500px', mt: 7, ml: '40px' }}>
+        <Grid item xs={12} md={6} sx={{ mx:'40px', width: '500px', mt: 7, ml: '40px' }}>
           <MotionBox
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            sx={{ pr: { md: 6 } }}
+            sx={{mx:'40px', pr: { md: 6 } }}
           >
             <Typography variant="overline" sx={{ color: '#bda67f', fontSize: 12 }}>
               CONTACT US
@@ -90,6 +89,7 @@ const Contact = () => {
               <Box key={i} sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Box
                   sx={{
+                    
                     width: 50,
                     height: 50,
                     bgcolor: isDark ? '#2c2c2c' : '#fff',
@@ -118,7 +118,7 @@ const Contact = () => {
           </MotionBox>
         </Grid>
 
-        <Grid item xs={12} md={6} sx={{ mt: 7, width: '600px' }}>
+        <Grid item xs={12} md={6} sx={{ mx:'40px',mt: 7, width: '600px' }}>
           <MotionBox
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
