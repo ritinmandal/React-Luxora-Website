@@ -13,7 +13,6 @@ import {
   Divider,
   Skeleton,
 } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -44,6 +43,7 @@ export default function DiningPagePremium() {
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCuisine, setActiveCuisine] = useState('All');
+  const [orderedDishIds, setOrderedDishIds] = useState([]);
 
   useEffect(() => {
     fetchDishes();
@@ -97,11 +97,13 @@ export default function DiningPagePremium() {
 
       if (error) throw error;
 
+      setOrderedDishIds((prev) => [...prev, dish.id]);
+
       toast.success('Item added to cart!', {
         style: { border: '1px solid #c2a15f', padding: '16px', color: '#4c4c4c' },
         iconTheme: { primary: '#c2a15f', secondary: '#ffffff' },
       });
-      
+
     } catch (err) {
       console.error('Add to cart failed:', err.message);
       toast.error('Failed to add item to cart.');
@@ -141,7 +143,6 @@ export default function DiningPagePremium() {
             >
               THE DINING EXPERIENCE
             </MotionTypography>
-
             <MotionTypography
               variant="h2"
               initial={{ opacity: 0, y: 20 }}
@@ -157,7 +158,6 @@ export default function DiningPagePremium() {
             >
               Curated Cuisines, Crafted With Soul
             </MotionTypography>
-
             <MotionTypography
               variant="body1"
               initial={{ opacity: 0, y: 20 }}
@@ -171,7 +171,7 @@ export default function DiningPagePremium() {
         </Container>
       </Box>
 
-      <Container sx={{ py: { xs: 6, md: 8 } }}>
+        <Container sx={{ py: { xs: 6, md: 8 } }}>
         <MotionBox variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
           <MotionTypography variants={fadeInUp} variant="h4" sx={{ fontFamily: `'Playfair Display', serif`, fontWeight: 700, textAlign: 'center', mb: 1.5 }}>
             Explore By Cuisine
@@ -210,12 +210,11 @@ export default function DiningPagePremium() {
             ))}
           </Stack>
 
-          
           <Grid container spacing={4} component={motion.div} variants={staggerContainer} whileInView="show" viewport={{ once: false, amount: 0.15 }}>
             {loading
               ? Array.from({ length: 8 }).map((_, i) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-                    <Card sx={{ borderRadius: 4, overflow: 'hidden', width: '200px' }}>
+                    <Card sx={{ borderRadius: 4, overflow: 'hidden', width: '250px' }}>
                       <Skeleton variant="rectangular" width="100%" height={220} />
                       <Box p={2}>
                         <Skeleton width="60%" height={28} />
@@ -237,43 +236,40 @@ export default function DiningPagePremium() {
                           overflow: 'hidden',
                           background: (t) => (t.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : '#fff'),
                           boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
+                          border: (t) => (t.palette.mode === 'dark' ? `1px solid ${gold}` : 'none'),
                         }}
                       >
                         <Box sx={{ position: 'relative' }}>
                           <CardMedia component="img" image={dish.image_url?.trim()} alt={dish.name} sx={{ width: '100%', height: 220, objectFit: 'cover', backgroundColor: 'white' }} />
                           {dish.is_veg && (
-                            <Box
-                              sx={{
-                                position: 'absolute',
-                                top: 16,
-                                left: 16,
-                                backgroundColor: 'rgba(255,255,255,0.9)',
-                                color: 'green',
-                                fontSize: 12,
-                                fontWeight: 700,
-                                borderRadius: 999,
-                                px: 1,
-                                py: 0.2,
-                              }}
-                            >
+                            <Box sx={{
+                              position: 'absolute',
+                              top: 16,
+                              left: 16,
+                              backgroundColor: 'rgba(255,255,255,0.9)',
+                              color: 'green',
+                              fontSize: 12,
+                              fontWeight: 700,
+                              borderRadius: 999,
+                              px: 1,
+                              py: 0.2,
+                            }}>
                               VEG
                             </Box>
                           )}
-                          <Box
-                            sx={{
-                              position: 'absolute',
-                              top: 16,
-                              right: 16,
-                              backgroundColor: gold,
-                              color: '#000',
-                              fontSize: 14,
-                              fontWeight: 700,
-                              borderRadius: 999,
-                              px: 1.5,
-                              py: 0.4,
-                              boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
-                            }}
-                          >
+                          <Box sx={{
+                            position: 'absolute',
+                            top: 16,
+                            right: 16,
+                            backgroundColor: gold,
+                            color: '#000',
+                            fontSize: 14,
+                            fontWeight: 700,
+                            borderRadius: 999,
+                            px: 1.5,
+                            py: 0.4,
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+                          }}>
                             ₹{dish.price}
                           </Box>
                         </Box>
@@ -296,43 +292,98 @@ export default function DiningPagePremium() {
                           <Divider sx={{ my: 1.5, opacity: 0.15 }} />
 
                           <Stack direction="row" spacing={1.5} mt="auto">
-                            <Button
-                              variant="contained"
-                              fullWidth
-                              startIcon={<LocalDiningIcon />}
-                              sx={{
-                                bgcolor: gold,
-                                color: '#000',
-                                borderRadius: 999,
-                                textTransform: 'none',
-                                fontWeight: 600,
-                                py: 1,
-                                '&:hover': { bgcolor: '#d0b37a' },
-                              }}
-                              onClick={() => handleAddToCart(dish)}
-                            >
-                              Add to Order
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              fullWidth
-                              endIcon={<ArrowForwardIosIcon sx={{ fontSize: 15 }} />}
-                              sx={{
-                                borderRadius: 999,
-                                textTransform: 'none',
-                                fontWeight: 600,
-                                borderColor: gold,
-                                color: gold,
-                                py: 1,
-                                '&:hover': {
-                                  backgroundColor: gold,
-                                  borderColor: gold,
-                                  color: '#000',
-                                },
-                              }}
-                            >
-                              View Details
-                            </Button>
+                            {orderedDishIds.includes(dish.id) ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  fullWidth
+                                  disabled
+                                  startIcon={<LocalDiningIcon />}
+                                  sx={{
+                                    bgcolor: 'success.main',
+                                    color: 'green',
+                                    borderRadius: 999,
+                                    pt: 100,
+                                    textTransform: 'none',
+                                    fontWeight: 300,
+                                    py: 0.6,
+                                    minHeight: 40,
+                                    
+                                    '&:hover': { bgcolor: 'darkgreen' },
+                                    '&:disabled': { bgcolor: 'success.dark', color: 'white', },
+                                  }}
+                                >
+                                  Ordered
+                                </Button>
+                                <Button
+                                  onClick={() => handleAddToCart(dish)}
+                                  variant="outlined"
+                                  fullWidth
+                                  endIcon={<ArrowForwardIosIcon sx={{ fontSize: 15 }} />}
+                                  sx={{
+                                    borderRadius: 999,
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    borderColor: gold,
+                                    color: gold,
+                                    py: 1,
+                                    minHeight: 44,
+                                    lineHeight: 1.2,
+                                    '&:hover': {
+                                      backgroundColor: gold,
+                                      borderColor: gold,
+                                      color: '#000',
+                                    },
+                                  }}
+                                >
+                                  Add More
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  fullWidth
+                                  startIcon={<LocalDiningIcon />}
+                                  sx={{
+                                    bgcolor: gold,
+                                    color: '#000',
+                                    borderRadius: 999,
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    py: 1,
+                                    minHeight: 44,
+                                    lineHeight: 1.2,
+                                    '&:hover': { bgcolor: '#d0b37a' },
+                                  }}
+                                  onClick={() => handleAddToCart(dish)}
+                                >
+                                  Add to Order
+                                </Button>
+                                <Button
+                                  variant="outlined"
+                                  fullWidth
+                                  endIcon={<ArrowForwardIosIcon sx={{ fontSize: 15 }} />}
+                                  sx={{
+                                    borderRadius: 999,
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    borderColor: gold,
+                                    color: gold,
+                                    py: 1,
+                                    minHeight: 44,
+                                    lineHeight: 1.2,
+                                    '&:hover': {
+                                      backgroundColor: gold,
+                                      borderColor: gold,
+                                      color: '#000',
+                                    },
+                                  }}
+                                >
+                                  View Details
+                                </Button>
+                              </>
+                            )}
                           </Stack>
                         </CardContent>
                       </Card>
