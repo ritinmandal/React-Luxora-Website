@@ -135,7 +135,7 @@ const OrderReceived = () => {
 
         doc.setDrawColor(120, 94, 38);
         doc.setFillColor(250, 240, 210);
-        doc.rect(14, yPos, 180, 65, 'FD');
+        doc.rect(14, yPos, 180, 55, 'FD');
 
         doc.setFont('helvetica');
         doc.setFontSize(12);
@@ -146,7 +146,7 @@ const OrderReceived = () => {
         doc.text(`GST (12%): ${gst}`, 20, yPos + 29);
         doc.text(`Grand Total: ${totalWithGST}`, 20, yPos + 36);
 
-        doc.addImage(qrImg, 'PNG', 150, yPos + 2, 35, 35);
+        doc.addImage(qrImg, 'PNG', 150, yPos + 2, 35, 40);
         yPos += 50;
 
         doc.setFont('courier', 'italic');
